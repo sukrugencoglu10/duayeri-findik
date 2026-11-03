@@ -1,0 +1,1638 @@
+/* ==========================================================================
+   DUAYERİ FINDIK — Ordu / Fatsa / Duayeri Köyü
+   Wireframe Birebir Uyarlama (GreenNest Layout -> Doğal Fındık & Bahçe Teması)
+   Mobil Öncelikli (Mobile-First), Hızlı ve Modern Tasarım
+   ========================================================================== */
+
+:root {
+  /* Renk Paleti */
+  --primary: #3B5233;          /* Doğal Fındık Yaprağı Koyu Yeşil (GreenNest CTA uyumlu) */
+  --primary-dark: #283A22;
+  --primary-light: #4A7C59;
+  --brown: #8B5E3C;            /* Fındık Kabuğu Kahverengisi */
+  --brown-dark: #5D3A1A;
+  --accent: #D4A847;           /* Altın Hasat Vurgusu */
+  --bg-cream: #FAF7F2;         /* Ana Arka Plan Krem */
+  --bg-soft: #F1EFEA;          /* Kart & Bölüm İkincil Arka Plan */
+  --bg-sage: #E3EAE0;          /* Hero & İkon Yuvarlak Açık Yeşil/Krem Tonu */
+  --white: #FFFFFF;
+  --text-dark: #2C221E;        /* Koyu Kahve/Antrasit Metin */
+  --text-muted: #686058;
+  --border-color: #E5DFD5;
+  --whatsapp: #25D366;
+  --whatsapp-dark: #1DA851;
+  --danger: #D9534F;
+  --success: #2E7D32;
+
+  /* Tipografi */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Gölgeler & Köşeler */
+  --shadow-sm: 0 4px 14px rgba(44, 34, 30, 0.06);
+  --shadow-md: 0 10px 30px rgba(44, 34, 30, 0.09);
+  --shadow-lg: 0 18px 45px rgba(44, 34, 30, 0.14);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 50px;
+  --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset & Temel Ayarlar */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-y: scroll; /* Tüm sekmelerde dikey kaydırma çubuğu payını sabit tutar */
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  zoom: 0.67; /* Tüm sayfalarda %67 sabit ölçek oranı */
+}
+
+@media (max-width: 768px) {
+  html {
+    zoom: 1; /* Mobil telefonlarda okunabilirlik için tam ölçek */
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-cream);
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+ul {
+  list-style: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Başlıklar */
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  color: var(--text-dark);
+  line-height: 1.22;
+  font-weight: 700;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 2.75rem;
+}
+
+.section-header h2 {
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  margin-bottom: 0.5rem;
+}
+
+.section-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0.5rem auto 0.75rem;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: "";
+  width: 50px;
+  height: 1px;
+  background-color: var(--border-color);
+}
+
+.section-divider span {
+  color: var(--primary);
+  font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-divider img,
+.emoji-inline {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  clip-path: circle(42% at 50% 50%);
+  vertical-align: middle;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.section-header p {
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1rem;
+}
+
+/* Butonlar */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+  min-height: 48px; /* Mobil dokunma standardı */
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--white);
+  box-shadow: 0 6px 18px rgba(59, 82, 51, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(59, 82, 51, 0.35);
+}
+
+.btn-brown {
+  background-color: var(--brown);
+  color: var(--white);
+  box-shadow: 0 6px 18px rgba(139, 94, 60, 0.25);
+}
+
+.btn-brown:hover {
+  background-color: var(--brown-dark);
+  transform: translateY(-2px);
+}
+
+.btn-light {
+  background-color: var(--bg-cream);
+  color: var(--text-dark);
+  border: 1px solid var(--border-color);
+}
+
+.btn-light:hover {
+  background-color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-whatsapp {
+  background-color: var(--whatsapp);
+  color: var(--white);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.3);
+}
+
+.btn-whatsapp:hover {
+  background-color: var(--whatsapp-dark);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   1. NAVBAR (Yüksekliği ve Logosu %15 Daha Arttırılmış Üst Menü)
+   ========================================================================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: rgba(250, 247, 242, 0.96);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(229, 223, 213, 0.55);
+  padding: 0.85rem 0;
+  min-height: 106px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.15rem;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.brand-logo img {
+  width: 84px;   /* Bir %15 daha büyütüldü (72px -> 84px) */
+  height: 84px;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: 50%;
+  background: var(--white);
+  padding: 2px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-sub {
+  display: none; /* Minimal görünüm için alt satır gizlendi */
+}
+
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: 1.45rem;
+}
+
+.nav-links a {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  position: relative;
+  padding: 0.25rem 0;
+  white-space: nowrap;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background-color: var(--primary);
+  transition: var(--transition);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 100%;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.nav-actions .btn {
+  padding: 0.55rem 1.35rem;
+  min-height: 40px;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.cart-icon-btn {
+  display: none; /* Minimal header için kaldırıldı */
+}
+
+.mobile-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  font-size: 1.35rem;
+  color: var(--text-dark);
+}
+
+/* Mobil Menü Açılır Alan */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem 1.5rem;
+  background: var(--bg-cream);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.mobile-nav.open {
+  display: flex;
+}
+
+.mobile-nav a {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.mobile-nav a:hover,
+.mobile-nav a.active {
+  background-color: var(--bg-sage);
+  color: var(--primary);
+}
+
+/* ==========================================================================
+   2. HERO SECTION (Genel Fındık Arka Planlı & Tam Ortalı Karşılama Alanı)
+   ========================================================================== */
+.hero-section {
+  position: relative;
+  background-image: linear-gradient(180deg, rgba(26, 19, 14, 0.68) 0%, rgba(34, 24, 17, 0.72) 100%), url('../image/hero-bg.jpg.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 6.75rem 0 10.25rem;
+  min-height: 540px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: var(--white);
+  text-align: center;
+}
+
+.hero-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-content {
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background-color: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #FFE4A3;
+  padding: 0.36rem 1.05rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 1.1rem;
+}
+
+.hero-content h1 {
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  color: var(--white);
+  margin: 0 auto 1rem;
+  letter-spacing: -0.01em;
+  line-height: 1.22;
+  max-width: 740px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+}
+
+.hero-content p {
+  font-size: 1.04rem;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 620px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+.hero-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.15rem;
+}
+
+.video-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: var(--white);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.video-play-circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: var(--white);
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.video-trigger-btn:hover .video-play-circle {
+  transform: scale(1.08);
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+/* Sağdaki Görsel Kompozisyonu */
+.hero-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-main-img-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 6px solid rgba(255, 255, 255, 0.85);
+  aspect-ratio: 4 / 3.4;
+}
+
+.hero-main-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.hero-main-img-wrap:hover img {
+  transform: scale(1.04);
+}
+
+.hero-floating-tag {
+  position: absolute;
+  bottom: -16px;
+  left: 16px;
+  background: var(--white);
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 3;
+}
+
+.hero-floating-tag .tag-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--bg-sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.hero-floating-tag strong {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--text-dark);
+}
+
+.hero-floating-tag span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   3. KG PAKET SEÇENEKLERİ BARI (Wireframe'deki Hero Altı 4 Kutu)
+   ========================================================================== */
+.kg-cards-section {
+  position: relative;
+  margin-top: -4.25rem;
+  z-index: 10;
+  margin-bottom: 4.5rem;
+}
+
+.kg-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.kg-card {
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1.15rem;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--primary-dark);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.kg-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
+}
+
+.kg-card-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  transition: var(--transition);
+  overflow: hidden;
+  border: 2px solid var(--bg-sage);
+  box-shadow: var(--shadow-sm);
+}
+
+.kg-card-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.18);
+  display: block;
+}
+
+.kg-card:hover .kg-card-icon {
+  border-color: var(--primary);
+  transform: scale(1.06);
+}
+
+.kg-card h3 {
+  font-family: var(--font-body);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 0.4rem;
+  min-height: 2.7rem;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kg-card p {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  line-height: 1.5;
+  flex: 1;
+  width: 100%;
+}
+
+.kg-card .kg-badge {
+  margin-top: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--brown);
+  background: #F4E9DC;
+  border: 2px solid var(--primary-dark);
+  padding: 0.62rem 1.85rem;
+  min-width: 140px;
+  border-radius: var(--radius-pill);
+  transition: var(--transition);
+  box-shadow: 0 3px 10px rgba(139, 94, 60, 0.12);
+}
+
+.kg-card:hover .kg-badge {
+  background: var(--primary);
+  border-color: var(--primary-dark);
+  color: var(--white);
+  transform: scale(1.04);
+  box-shadow: 0 6px 16px rgba(59, 82, 51, 0.25);
+}
+
+/* ==========================================================================
+   4. NEDEN BİZ BÖLÜMÜ (Wireframe: Sol 2 Özellik + Ortada Fındık.jpeg + Sağ 2 Özellik)
+   ========================================================================== */
+.why-us-section {
+  padding: 2.5rem 0 5rem;
+}
+
+.why-us-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.why-us-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.15rem;
+}
+
+.feature-icon-circle {
+  flex-shrink: 0;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background-color: var(--bg-sage);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.55rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.feature-text h3 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  margin-bottom: 0.35rem;
+  color: var(--text-dark);
+}
+
+.feature-text p {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.why-us-center-image {
+  position: relative;
+  max-width: 340px;
+  margin: 0 auto;
+  border-radius: 180px 180px 28px 28px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 6px solid var(--white);
+  aspect-ratio: 3 / 4;
+}
+
+.why-us-center-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.why-us-center-caption {
+  position: absolute;
+  bottom: 0;
+  inset-inline: 0;
+  background: linear-gradient(to top, rgba(25, 38, 20, 0.9), transparent);
+  color: var(--white);
+  padding: 2rem 1rem 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   5. FINDIK SERÜVENİ BANNER'I (Wireframe'deki "Plant Care Made Simple" Alanı)
+   ========================================================================== */
+.adventure-banner-section {
+  padding: 1rem 0 5rem;
+}
+
+.adventure-banner {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-image: url('../görsel/hazelnut.jpeg');
+  background-size: cover;
+  background-position: center;
+  padding: 2.75rem 1.75rem;
+  box-shadow: var(--shadow-lg);
+  color: var(--white);
+}
+
+.adventure-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, rgba(35, 53, 29, 0.92) 0%, rgba(44, 65, 37, 0.84) 55%, rgba(59, 40, 24, 0.82) 100%);
+  backdrop-filter: blur(3px);
+  z-index: 1;
+}
+
+.adventure-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.adventure-text h2 {
+  color: var(--white);
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  margin-bottom: 0.85rem;
+}
+
+.adventure-text p {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.98rem;
+  margin-bottom: 1.5rem;
+  max-width: 360px;
+}
+
+.adventure-cards-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.15rem;
+}
+
+.adventure-glass-card {
+  background-color: rgba(244, 243, 236, 0.94);
+  color: var(--text-dark);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.adventure-glass-card:hover {
+  transform: translateY(-5px);
+  background-color: var(--white);
+}
+
+.adventure-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--bg-sage);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.adventure-glass-card h3 {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.adventure-glass-card p {
+  font-size: 0.87rem;
+  color: var(--text-muted);
+  margin-bottom: 0.85rem;
+}
+
+.adventure-card-link {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.adventure-side-preview {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.adventure-side-preview img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow-md);
+}
+
+/* ==========================================================================
+   6. ÜRÜN GRİD'İ (Wireframe: Filtre Sekmeleri + Paket Fındık Kartları + Künye)
+   ========================================================================== */
+.products-section {
+  padding: 1rem 0 5.5rem;
+}
+
+.filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 2.5rem;
+}
+
+.filter-tab-btn {
+  padding: 0.6rem 1.35rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-color);
+  background-color: var(--white);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filter-tab-btn:hover,
+.filter-tab-btn.active {
+  background-color: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(59, 82, 51, 0.25);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.product-card {
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-width: 0;
+  width: 100%;
+}
+
+.product-card-top {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.product-card-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-light);
+}
+
+.product-img-box {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background-color: var(--bg-soft);
+  width: 100%;
+  height: 250px;
+  flex-shrink: 0;
+  margin-bottom: 1rem;
+}
+
+.product-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-img-box img {
+  transform: scale(1.06);
+}
+
+.product-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: var(--primary);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-pill);
+  z-index: 2;
+}
+
+.product-randiman-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(44, 34, 30, 0.88);
+  color: #FFD97D;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.28rem 0.65rem;
+  border-radius: var(--radius-sm);
+  z-index: 2;
+}
+
+.product-title {
+  font-family: var(--font-heading);
+  font-size: 1.12rem;
+  line-height: 1.35;
+  margin-bottom: 0.45rem;
+  color: var(--text-dark);
+  height: 1.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.product-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.9rem;
+  line-height: 1.5;
+  height: 4.5rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* 🏷️ ÜRÜN TAZELİK & MENŞEİ KÜNYESİ (Hasat Yılı, Köy/İlçe, Kırım/Paketleme, Randıman) */
+.product-kunye-box {
+  background-color: var(--bg-cream);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.75rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.76rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.kunye-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px dashed rgba(200, 190, 175, 0.85);
+  height: 38px;
+}
+
+.kunye-row:last-child {
+  border-bottom: none;
+}
+
+.kunye-label {
+  color: var(--text-muted);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.kunye-val {
+  color: var(--text-dark);
+  font-weight: 700;
+  text-align: right;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  height: 68px;
+  flex-shrink: 0;
+}
+
+.product-price-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  flex: 1;
+}
+
+.product-price-wrap .price-amount {
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: var(--primary);
+  display: block;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.product-price-wrap .price-unit {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  line-height: 1.25;
+  margin-top: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-order-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.62rem 1.15rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--primary);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 12px rgba(59, 82, 51, 0.22);
+}
+
+.product-order-btn:hover {
+  background-color: var(--whatsapp);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.35);
+}
+
+/* ==========================================================================
+   SERÜVEN MEDYA MODAL / GALERİ BÖLÜMÜ
+   ========================================================================== */
+.media-showcase-section {
+  padding: 3.5rem 0;
+  background-color: var(--bg-soft);
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.media-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.media-card img,
+.media-card video {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+.media-card-body {
+  padding: 1rem 1.25rem;
+}
+
+.media-card-body span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.media-card-body h4 {
+  font-size: 1.05rem;
+  margin-top: 0.2rem;
+}
+
+/* ==========================================================================
+   MÜŞTERİ YORUMLARI & SSS (GEO / AI Arama Uyumlu FAQ)
+   ========================================================================== */
+.testimonials-section {
+  padding: 4.5rem 0;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.stars {
+  color: #F59E0B;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.testimonial-card p {
+  font-style: italic;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.testimonial-author {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--primary);
+}
+
+.testimonial-loc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* SSS / GEO Blokları */
+.faq-section {
+  padding: 4rem 0;
+  background-color: var(--bg-soft);
+}
+
+.faq-list {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  padding: 1.25rem 1.5rem;
+}
+
+.faq-item summary {
+  font-weight: 700;
+  font-size: 1.02rem;
+  cursor: pointer;
+  color: var(--text-dark);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item p {
+  margin-top: 0.85rem;
+  color: var(--text-muted);
+  font-size: 0.94rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.85rem;
+}
+
+/* ==========================================================================
+   SAYFA BAŞLIK ALANI (Minimal, Elit & Premium Tasarım)
+   ========================================================================== */
+.page-hero {
+  position: relative;
+  background: linear-gradient(180deg, #EFECE4 0%, var(--bg-cream) 100%);
+  border-bottom: 1px solid rgba(139, 94, 60, 0.14);
+  padding: 2.25rem 0 2rem;
+  text-align: center;
+}
+
+.page-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--brown);
+  margin-bottom: 0.55rem;
+}
+
+.page-eyebrow::before,
+.page-eyebrow::after {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background-color: rgba(139, 94, 60, 0.4);
+}
+
+.page-hero h1 {
+  font-family: var(--font-heading);
+  color: var(--text-dark);
+  font-size: clamp(2.15rem, 3.2vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+
+.page-hero p {
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  font-weight: 400;
+  max-width: 620px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   FORMLAR & SİPARİŞ / İLETİŞİM KARTLARI
+   ========================================================================== */
+.two-col-page-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+  width: 100%;
+}
+
+.form-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.15rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.form-group label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.form-control {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-cream);
+  color: var(--text-dark);
+  transition: var(--transition);
+  text-overflow: ellipsis;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  background-color: var(--white);
+  box-shadow: 0 0 0 3px rgba(59, 82, 51, 0.14);
+}
+
+.bank-info-box {
+  background-color: #F4F7F2;
+  border: 2px dashed var(--primary);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+/* Harita & Yol Tarifi Kutusu */
+.map-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+.map-frame-wrap {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  height: 360px;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--border-color);
+}
+
+.map-frame-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ==========================================================================
+   7. FOOTER (Alt Bilgi & NAP Yerel SEO Uyumlu)
+   ========================================================================== */
+.site-footer {
+  background-color: #212D1D;
+  color: rgba(255, 255, 255, 0.86);
+  padding: 4rem 0 2rem;
+  margin-top: 3rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.25rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer-col h3,
+.footer-col h4 {
+  color: var(--white);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.footer-col ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.footer-col ul li a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.footer-col a:hover {
+  color: var(--accent);
+}
+
+/* Footer Yuvarlak Mühür Logo (Üstte DUAYERİ FINDIK, Altta ÜRETİCİDEN TÜKETİCİYE) */
+.footer-logo-seal {
+  position: relative;
+  width: 196px;
+  height: 196px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  border: 3px solid #D99B52;
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+.footer-logo-seal:hover {
+  transform: scale(1.04);
+}
+
+.footer-logo-seal img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 50%;
+  clip-path: circle(46% at 50% 48%);
+  display: block;
+}
+
+.footer-logo-seal svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.footer-logo-seal .seal-top-text {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 800;
+  fill: #4A2F1D;
+  letter-spacing: 2px;
+}
+
+.footer-logo-seal .seal-bottom-text {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 800;
+  fill: #3B5233;
+  letter-spacing: 1.6px;
+}
+
+.footer-bottom {
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+}
+
+/* ==========================================================================
+   🟢 SAĞ ALTTA YÜZEN YUVARLAK WHATSAPP BUTONU (CANLI NABIZ EFEKTLİ)
+   ========================================================================== */
+.floating-whatsapp {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background-color: var(--whatsapp);
+  color: var(--white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.5);
+  transition: var(--transition);
+  animation: heartbeatWhatsapp 1.8s infinite ease-in-out;
+}
+
+.floating-whatsapp span {
+  display: none;
+}
+
+.floating-whatsapp::before,
+.floating-whatsapp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: var(--whatsapp);
+  z-index: -1;
+  animation: pulseRingWhatsapp 1.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.floating-whatsapp::after {
+  animation-delay: 0.9s;
+}
+
+.floating-whatsapp:hover {
+  background-color: var(--whatsapp-dark);
+  transform: scale(1.12);
+  color: var(--white);
+}
+
+.floating-whatsapp svg {
+  width: 34px;
+  height: 34px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+@keyframes heartbeatWhatsapp {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes pulseRingWhatsapp {
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS (Tablet & Masaüstü)
+   ========================================================================== */
+@media (min-width: 640px) {
+  .kg-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .adventure-cards-wrap {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .media-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .form-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .two-col-page-layout {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
+  }
+  .nav-links {
+    display: flex;
+  }
+  .mobile-menu-toggle {
+    display: none;
+  }
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .kg-cards-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+  .why-us-layout {
+    grid-template-columns: 1fr 340px 1fr;
+    gap: 2.5rem;
+  }
+  .adventure-inner {
+    grid-template-columns: 1fr 1.35fr 0.85fr;
+  }
+  .products-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .media-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .testimonials-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .footer-grid {
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  }
+  .footer-bottom {
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+  }
+}

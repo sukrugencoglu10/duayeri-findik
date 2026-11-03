@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yönetim Paneli (Admin) | Duayeri Fındık</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/x-icon" href="../image/favicom/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 100vh;
+    }
+    .admin-sidebar {
+      background: #212D1D;
+      color: #fff;
+      padding: 1.5rem;
+    }
+    .admin-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+    }
+    .admin-nav-btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    .admin-nav-btn:hover,
+    .admin-nav-btn.active {
+      background: var(--accent);
+      color: #1F1916;
+    }
+    .admin-main {
+      padding: 2rem 1.25rem;
+      background: var(--bg-cream);
+    }
+    .admin-tab-panel {
+      display: none;
+    }
+    .admin-tab-panel.active {
+      display: block;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      background: #fff;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .admin-table th,
+    .admin-table td {
+      padding: 0.85rem;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+    }
+    .admin-table th {
+      background: var(--bg-sage);
+      color: var(--primary);
+      font-weight: 700;
+    }
+    @media (min-width: 960px) {
+      .admin-layout {
+        grid-template-columns: 270px 1fr;
+      }
+      .admin-nav {
+        flex-direction: column;
+      }
+      .admin-main {
+        padding: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔐 ŞİFRE KORUMALI GİRİŞ EKRANI -->
+  <div id="adminLoginScreen" style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem; background:linear-gradient(125deg, #212D1D, #3B5233);">
+    <div class="form-card" style="max-width:420px; width:100%; text-align:center;">
+      <img src="../image/logo.png.png" alt="Logo" style="width:72px; height:72px; margin:0 auto 1rem; border-radius:50%;">
+      <h2 style="margin-bottom:0.35rem;">Duayeri Fındık Admin</h2>
+      <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.5rem;">
+        Paket künye bilgileri (Randıman, Hasat Yılı, Köy/İlçe, Paketleme Tarihi), fotoğraf/video ve sipariş yönetimi.
+      </p>
+      <form id="adminLoginForm" class="form-grid">
+        <div class="form-group" style="text-align:left;">
+          <label for="adminPassInput">Yönetici Şifresi (Varsayılan: <strong>duayeri52</strong>)</label>
+          <input type="password" id="adminPassInput" class="form-control" value="duayeri52" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">🔐 Panele Giriş Yap</button>
+      </form>
+      <a href="../index.html" style="display:inline-block; margin-top:1rem; font-size:0.85rem; color:var(--text-muted);">← Siteye Geri Dön</a>
+    </div>
+  </div>
+
+  <!-- 🛠️ ANA YÖNETİM PANELİ -->
+  <div class="admin-layout" id="adminDashboardScreen" style="display:none;">
+    <aside class="admin-sidebar">
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <img src="../image/logo.png.png" alt="Logo" style="width:44px; height:44px; border-radius:50%; background:#fff; padding:2px;">
+        <div>
+          <strong style="display:block; font-size:1.05rem;">Duayeri Admin</strong>
+          <span style="font-size:0.75rem; color:#FFD97D;">Ordu / Fatsa / Duayeri</span>
+        </div>
+      </div>
+
+      <div class="admin-nav">
+        <button class="admin-nav-btn active" data-tab="tab-kunye">🌰 Paket & Künye Kontrolü</button>
+        <button class="admin-nav-btn" data-tab="tab-orders">📋 Siparişler & Kargo</button>
+        <button class="admin-nav-btn" data-tab="tab-gallery">📸 Fotoğraf & Video Ekle</button>
+        <button class="admin-nav-btn" data-tab="tab-settings">⚙️ Ayarlar, IBAN & Reklam Pixel</button>
+        <a href="../index.html" class="admin-nav-btn" style="text-align:center; background:#3B5233; margin-top:1rem;">🌐 Canlı Siteyi Gör →</a>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <div id="adminAlertBox" style="display:none; background:#E8F5E9; border:1px solid var(--success); color:var(--success); padding:0.9rem 1.25rem; border-radius:var(--radius-sm); margin-bottom:1.5rem; font-weight:700;"></div>
+
+      <!-- TAB 1: PAKET & KÜNYE YÖNETİMİ (Randıman, Hasat Yılı, Köy/İlçe, Kırım/Paketleme Tarihi, Fiyat) -->
+      <section class="admin-tab-panel active" id="tab-kunye">
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+          <div>
+            <h2>🌰 Paket & Künye Bilgileri Yönetimi</h2>
+            <p style="font-size:0.9rem; color:var(--text-muted);">
+              Her ürün paketinin <strong>Randıman Oranı, Hasat Yılı, Köy/İlçe, Kırım/Paketleme Tarihi ve Fiyatını</strong> buradan anlık güncelleyebilirsiniz.
+            </p>
+          </div>
+          <button class="btn btn-light" id="resetDefaultDataBtn" style="font-size:0.82rem;">🔄 Varsayılan Verilere Sıfırla</button>
+        </div>
+
+        <div id="adminProductsEditorList" style="display:grid; grid-template-columns:1fr; gap:1.5rem;"></div>
+
+        <!-- Yeni Paket Ekleme Formu -->
+        <div class="form-card" style="margin-top:2rem;">
+          <h3 style="margin-bottom:1rem;">➕ Yeni Fındık Paketi Ekle</h3>
+          <form id="addNewProductForm" class="form-grid form-grid-2">
+            <div class="form-group">
+              <label>Paket Adı *</label>
+              <input type="text" id="newProdName" class="form-control" placeholder="Örn: Kabuklu Fındık — 50 KG Çuval" required>
+            </div>
+            <div class="form-group">
+              <label>Kategori Filtresi *</label>
+              <select id="newProdCategory" class="form-control">
+                <option value="5kg">5 KG</option>
+                <option value="10kg">10 KG</option>
+                <option value="20kg">20+ KG</option>
+                <option value="toptan">Toptan / Tonaj</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Fiyat (TL, Toptan ise 0 yazın) *</label>
+              <input type="number" id="newProdPrice" class="form-control" value="4000" required>
+            </div>
+            <div class="form-group">
+              <label>Görünen Fiyat Metni *</label>
+              <input type="text" id="newProdPriceText" class="form-control" placeholder="Örn: ₺4.000 veya Teklif Alın" required>
+            </div>
+            <div class="form-group">
+              <label>⚖️ Randıman Bilgisi *</label>
+              <input type="text" id="newProdRandiman" class="form-control" value="%53+ Yüksek Randıman" required>
+            </div>
+            <div class="form-group">
+              <label>📅 Hasat Yılı *</label>
+              <input type="text" id="newProdHarvest" class="form-control" value="2026 Yeni Mahsul" required>
+            </div>
+            <div class="form-group">
+              <label>📍 Köy / İlçe Bilgisi *</label>
+              <input type="text" id="newProdOrigin" class="form-control" value="Duayeri Köyü / Fatsa / Ordu" required>
+            </div>
+            <div class="form-group">
+              <label>📦 Kırım / Paketleme Tarihi *</label>
+              <input type="text" id="newProdPackDate" class="form-control" value="Sipariş Günü Taze Çuvallama" required>
+            </div>
+            <div class="form-group">
+              <label>Görsel Yolu *</label>
+              <input type="text" id="newProdImage" class="form-control" value="image/ürün_foto/indir (28).jpeg" required>
+            </div>
+            <div class="form-group">
+              <label>Kısa Açıklama *</label>
+              <input type="text" id="newProdDesc" class="form-control" value="Ordu Fatsa Duayeri Köyü doğal kabuklu fındık paketi." required>
+            </div>
+            <div style="grid-column:1 / -1;">
+              <button type="submit" class="btn btn-primary">➕ Paketi Kaydet ve Sitede Yayınla</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 2: SİPARİŞ & KARGO YÖNETİMİ -->
+      <section class="admin-tab-panel" id="tab-orders">
+        <h2 style="margin-bottom:0.5rem;">📋 Gelen Siparişler & Kargo Takip Kodu Yönetimi</h2>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1.5rem;">
+          Müşterilerin oluşturduğu siparişleri görebilir, kargo takip kodunu girip tek tıkla WhatsApp'tan bildirim gönderebilirsiniz.
+        </p>
+        <div style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Sipariş No</th>
+                <th>Müşteri & Tel</th>
+                <th>Paket / Tutar</th>
+                <th>Kargo & Takip Kodu</th>
+                <th>Durum & Kaynak (UTM)</th>
+                <th>İşlem</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 3: FOTOĞRAF & VİDEO GALERİ YÖNETİMİ -->
+      <section class="admin-tab-panel" id="tab-gallery">
+        <h2 style="margin-bottom:0.5rem;">📸 Fındık Serüveni Fotoğraf & Video Yönetimi</h2>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1.5rem;">
+          Ana sayfadaki ve Hakkımızda sayfasındaki "Fındık Serüvenimiz" galerisine yeni fotoğraf veya YouTube/video ekleyebilirsiniz.
+        </p>
+
+        <div class="form-card" style="margin-bottom:2rem;">
+          <h3 style="margin-bottom:1rem;">➕ Yeni Fotoğraf veya Video Ekle</h3>
+          <form id="addGalleryMediaForm" class="form-grid form-grid-2">
+            <div class="form-group">
+              <label>Medya Tipi *</label>
+              <select id="galType" class="form-control">
+                <option value="image">📸 Fotoğraf</option>
+                <option value="video">🎥 Video (YouTube Embed / MP4)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Kategori Etiketi *</label>
+              <input type="text" id="galCategory" class="form-control" value="Hasat & Harman" required>
+            </div>
+            <div class="form-group">
+              <label>Başlık *</label>
+              <input type="text" id="galTitle" class="form-control" placeholder="Örn: Duayeri Köyü 2026 Hasadı" required>
+            </div>
+            <div class="form-group">
+              <label>Görsel Yolu veya Video URL *</label>
+              <input type="text" id="galUrl" class="form-control" placeholder="image/ürün_foto/Fındık.jpeg veya https://..." required>
+            </div>
+            <div class="form-group" style="grid-column:1 / -1;">
+              <label>Açıklama</label>
+              <input type="text" id="galDesc" class="form-control" placeholder="Görsel/video alt açıklaması (SEO için önemli)">
+            </div>
+            <div style="grid-column:1 / -1;">
+              <button type="submit" class="btn btn-primary">📸 Medyayı Galeriye Ekle</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="adminGalleryList" class="media-grid"></div>
+      </section>
+
+      <!-- TAB 4: GENEL AYARLAR, IBAN & REKLAM PIXEL ID YÖNETİMİ -->
+      <section class="admin-tab-panel" id="tab-settings">
+        <h2 style="margin-bottom:0.5rem;">⚙️ Site Ayarları, IBAN & Reklam Dönüşüm Kodları</h2>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1.5rem;">
+          WhatsApp numarası, Havale/EFT IBAN bilgileri ve Google Ads / GA4 / Meta / TikTok Pixel ID'lerinizi buradan yönetebilirsiniz.
+        </p>
+
+        <form id="adminSettingsForm" class="form-card form-grid form-grid-2">
+          <div class="form-group">
+            <label>Ana Sayfa Hero Başlığı</label>
+            <input type="text" id="setHeroTitle" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Serüven Banner Arka Plan Görseli (hazelnut vb.)</label>
+            <input type="text" id="setAdvBg" class="form-control" placeholder="image/hero-bg.jpg.jpeg">
+          </div>
+          <div class="form-group">
+            <label>Telefon Numarası</label>
+            <input type="text" id="setPhone" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>WhatsApp Numarası (Başında 90 ile, boşluksuz)</label>
+            <input type="text" id="setWhatsapp" class="form-control" placeholder="905320005252">
+          </div>
+          <div class="form-group">
+            <label>Banka & Şube Adı</label>
+            <input type="text" id="setBankName" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>IBAN Alıcı Adı Soyadı</label>
+            <input type="text" id="setIbanHolder" class="form-control">
+          </div>
+          <div class="form-group" style="grid-column:1 / -1;">
+            <label>IBAN Numarası</label>
+            <input type="text" id="setIbanNumber" class="form-control">
+          </div>
+
+          <div style="grid-column:1 / -1; border-top:1px solid var(--border-color); padding-top:1rem; margin-top:0.5rem;">
+            <h3>📢 Reklam & Analitik Pixel ID'leri (WhatsApp + Form Primary Dönüşüm)</h3>
+          </div>
+
+          <div class="form-group">
+            <label>Google Analytics 4 (GA4) Measurement ID</label>
+            <input type="text" id="setGa4Id" class="form-control" placeholder="G-XXXXXXXXXX">
+          </div>
+          <div class="form-group">
+            <label>Google Ads Conversion ID</label>
+            <input type="text" id="setGoogleAdsId" class="form-control" placeholder="AW-XXXXXXXXX">
+          </div>
+          <div class="form-group">
+            <label>Meta (Facebook/Instagram) Pixel ID</label>
+            <input type="text" id="setMetaPixelId" class="form-control" placeholder="1234567890">
+          </div>
+          <div class="form-group">
+            <label>TikTok Pixel ID</label>
+            <input type="text" id="setTiktokPixelId" class="form-control" placeholder="CXXXXXXXXXXXX">
+          </div>
+
+          <div style="grid-column:1 / -1;">
+            <button type="submit" class="btn btn-primary">💾 Tüm Ayarları Kaydet</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script>
+    const AdminController = {
+      init() {
+        this.bindLogin();
+        this.bindTabs();
+        this.renderAll();
+        this.bindForms();
+      },
+
+      showAlert(msg) {
+        const box = document.getElementById("adminAlertBox");
+        if (!box) return;
+        box.textContent = msg;
+        box.style.display = "block";
+        setTimeout(() => {
+          box.style.display = "none";
+        }, 4000);
+      },
+
+      bindLogin() {
+        const loginForm = document.getElementById("adminLoginForm");
+        if (!loginForm) return;
+        loginForm.addEventListener("submit", e => {
+          e.preventDefault();
+          const pass = document.getElementById("adminPassInput").value.trim();
+          if (pass === "duayeri52" || pass === "admin") {
+            document.getElementById("adminLoginScreen").style.display = "none";
+            document.getElementById("adminDashboardScreen").style.display = "grid";
+          } else {
+            alert("Hatalı şifre! Varsayılan şifre: duayeri52");
+          }
+        });
+      },
+
+      bindTabs() {
+        document.querySelectorAll(".admin-nav-btn[data-tab]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            document.querySelectorAll(".admin-nav-btn[data-tab]").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".admin-tab-panel").forEach(p => p.classList.remove("active"));
+            btn.classList.add("active");
+            const target = document.getElementById(btn.getAttribute("data-tab"));
+            if (target) target.classList.add("active");
+          });
+        });
+      },
+
+      renderAll() {
+        this.renderProductsEditor();
+        this.renderOrdersTable();
+        this.renderGalleryAdmin();
+        this.populateSettingsForm();
+      },
+
+      // 🌰 Paket & Künye Düzenleyici (Randıman, Hasat Yılı, Köy/İlçe, Paketleme Tarihi, Fiyat)
+      renderProductsEditor() {
+        const container = document.getElementById("adminProductsEditorList");
+        if (!container) return;
+        const { products } = window.SiteData.getData();
+
+        container.innerHTML = products
+          .map(
+            (p, idx) => `
+          <div class="form-card" style="border-left:5px solid var(--primary);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <h3>🌰 ${p.name} <span style="font-size:0.8rem; color:var(--brown);">(${p.weightLabel})</span></h3>
+              <button type="button" class="btn btn-light" style="padding:0.4rem 0.9rem; min-height:36px; color:var(--danger);" onclick="AdminController.deleteProduct(${idx})">🗑️ Sil</button>
+            </div>
+            <div class="form-grid form-grid-2">
+              <div class="form-group">
+                <label>Paket Adı</label>
+                <input type="text" class="form-control" id="p_name_${idx}" value="${p.name}">
+              </div>
+              <div class="form-group">
+                <label>Fiyat (Sayısal TL) & Görünen Fiyat</label>
+                <div style="display:flex; gap:0.5rem;">
+                  <input type="number" class="form-control" id="p_price_${idx}" value="${p.price}" style="width:50%;">
+                  <input type="text" class="form-control" id="p_pricetext_${idx}" value="${p.priceText}" style="width:50%;">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>⚖️ Randıman Bilgisi (Künye)</label>
+                <input type="text" class="form-control" id="p_randiman_${idx}" value="${p.randiman}">
+              </div>
+              <div class="form-group">
+                <label>📅 Hasat Yılı (Künye)</label>
+                <input type="text" class="form-control" id="p_harvest_${idx}" value="${p.harvestYear}">
+              </div>
+              <div class="form-group">
+                <label>📍 Köy / İlçe Menşei (Künye)</label>
+                <input type="text" class="form-control" id="p_origin_${idx}" value="${p.originLocation}">
+              </div>
+              <div class="form-group">
+                <label>📦 Kırım / Paketleme Tarihi (Künye)</label>
+                <input type="text" class="form-control" id="p_packdate_${idx}" value="${p.packagingDate}">
+              </div>
+              <div class="form-group">
+                <label>Görsel Dosya Yolu</label>
+                <input type="text" class="form-control" id="p_img_${idx}" value="${p.image}">
+              </div>
+              <div class="form-group">
+                <label>Açıklama</label>
+                <input type="text" class="form-control" id="p_desc_${idx}" value="${p.description}">
+              </div>
+            </div>
+            <div style="margin-top:1rem;">
+              <button type="button" class="btn btn-primary" onclick="AdminController.saveProduct(${idx})">
+                💾 Bu Paketin Künye & Fiyat Bilgilerini Güncelle
+              </button>
+            </div>
+          </div>
+        `
+          )
+          .join("");
+      },
+
+      saveProduct(idx) {
+        const data = window.SiteData.getData();
+        const p = data.products[idx];
+        if (!p) return;
+
+        p.name = document.getElementById(`p_name_${idx}`).value.trim();
+        p.price = Number(document.getElementById(`p_price_${idx}`).value || 0);
+        p.priceText = document.getElementById(`p_pricetext_${idx}`).value.trim();
+        p.randiman = document.getElementById(`p_randiman_${idx}`).value.trim();
+        p.harvestYear = document.getElementById(`p_harvest_${idx}`).value.trim();
+        p.originLocation = document.getElementById(`p_origin_${idx}`).value.trim();
+        p.packagingDate = document.getElementById(`p_packdate_${idx}`).value.trim();
+        p.image = document.getElementById(`p_img_${idx}`).value.trim();
+        p.description = document.getElementById(`p_desc_${idx}`).value.trim();
+
+        window.SiteData.saveData(data);
+        this.renderProductsEditor();
+        this.showAlert(`✅ "${p.name}" paketinin Randıman, Hasat Yılı, Köy/İlçe, Paketleme Tarihi ve Fiyat bilgileri güncellendi!`);
+      },
+
+      deleteProduct(idx) {
+        const data = window.SiteData.getData();
+        data.products.splice(idx, 1);
+        window.SiteData.saveData(data);
+        this.renderProductsEditor();
+        this.showAlert("🗑️ Paket silindi.");
+      },
+
+      renderOrdersTable() {
+        const tbody = document.getElementById("adminOrdersTableBody");
+        if (!tbody) return;
+        const { orders } = window.SiteData.getData();
+
+        tbody.innerHTML = orders
+          .map(
+            (o, idx) => `
+          <tr>
+            <td><strong>${o.orderNo}</strong><br><small style="color:var(--text-muted);">${o.createdAt}</small></td>
+            <td><strong>${o.customerName}</strong><br>${o.phone}<br><small>${o.city}</small></td>
+            <td>${o.packageName} (x${o.quantity})<br><strong style="color:var(--primary);">${o.totalText}</strong></td>
+            <td>
+              <div style="margin-bottom:0.35rem;"><strong>${o.cargoCompany}</strong></div>
+              <input type="text" id="ord_track_${idx}" class="form-control" style="padding:0.4rem; font-size:0.8rem;" placeholder="Takip Kodu Girin" value="${o.trackingCode || ""}">
+            </td>
+            <td>
+              <select id="ord_status_${idx}" class="form-control" style="padding:0.4rem; font-size:0.8rem; margin-bottom:0.3rem;">
+                <option value="Havale/EFT Onayı Bekleniyor" ${o.status.includes("Bekleniyor") ? "selected" : ""}>Havale Bekleniyor</option>
+                <option value="Hazırlanıyor (Taze Çuvallama)" ${o.status.includes("Hazırlanıyor") ? "selected" : ""}>Hazırlanıyor</option>
+                <option value="Kargoya Verildi" ${o.status === "Kargoya Verildi" ? "selected" : ""}>Kargoya Verildi</option>
+                <option value="Teslim Edildi" ${o.status === "Teslim Edildi" ? "selected" : ""}>Teslim Edildi</option>
+              </select>
+              <small style="display:block; color:var(--brown);">Kaynak: ${o.utmSource || "direct"}</small>
+            </td>
+            <td>
+              <button type="button" class="btn btn-primary" style="padding:0.45rem 0.85rem; min-height:36px; font-size:0.8rem;" onclick="AdminController.saveOrder(${idx})">Kaydet</button>
+            </td>
+          </tr>
+        `
+          )
+          .join("");
+      },
+
+      saveOrder(idx) {
+        const data = window.SiteData.getData();
+        const o = data.orders[idx];
+        if (!o) return;
+        o.trackingCode = document.getElementById(`ord_track_${idx}`).value.trim();
+        o.status = document.getElementById(`ord_status_${idx}`).value;
+        window.SiteData.saveData(data);
+        this.renderOrdersTable();
+        this.showAlert(`✅ ${o.orderNo} numaralı siparişin kargo ve durum bilgisi güncellendi!`);
+      },
+
+      renderGalleryAdmin() {
+        const list = document.getElementById("adminGalleryList");
+        if (!list) return;
+        const { gallery } = window.SiteData.getData();
+
+        list.innerHTML = gallery
+          .map(
+            (g, idx) => `
+          <div class="media-card">
+            ${
+              g.type === "video"
+                ? `<div style="height:180px; background:#111; color:#fff; display:flex; align-items:center; justify-content:center;">🎥 Video: ${g.url}</div>`
+                : `<img src="../${g.url.replace(/^\.\.\//, "")}" alt="${g.title}" style="height:180px;">`
+            }
+            <div class="media-card-body">
+              <span>${g.category}</span>
+              <h4>${g.title}</h4>
+              <button type="button" class="btn btn-light" style="margin-top:0.75rem; padding:0.4rem 0.85rem; min-height:34px; color:var(--danger);" onclick="AdminController.deleteGalleryItem(${idx})">🗑️ Kaldır</button>
+            </div>
+          </div>
+        `
+          )
+          .join("");
+      },
+
+      deleteGalleryItem(idx) {
+        const data = window.SiteData.getData();
+        data.gallery.splice(idx, 1);
+        window.SiteData.saveData(data);
+        this.renderGalleryAdmin();
+        this.showAlert("🗑️ Galeri öğesi silindi.");
+      },
+
+      populateSettingsForm() {
+        const { settings } = window.SiteData.getData();
+        document.getElementById("setHeroTitle").value = settings.heroTitle || "";
+        document.getElementById("setAdvBg").value = settings.adventureBgImage || "";
+        document.getElementById("setPhone").value = settings.phone || "";
+        document.getElementById("setWhatsapp").value = settings.whatsapp || "";
+        document.getElementById("setBankName").value = settings.bankName || "";
+        document.getElementById("setIbanHolder").value = settings.ibanHolder || "";
+        document.getElementById("setIbanNumber").value = settings.ibanNumber || "";
+        document.getElementById("setGa4Id").value = settings.ga4Id || "";
+        document.getElementById("setGoogleAdsId").value = settings.googleAdsId || "";
+        document.getElementById("setMetaPixelId").value = settings.metaPixelId || "";
+        document.getElementById("setTiktokPixelId").value = settings.tiktokPixelId || "";
+      },
+
+      bindForms() {
+        // Yeni Paket Ekleme
+        const addProdForm = document.getElementById("addNewProductForm");
+        if (addProdForm) {
+          addProdForm.addEventListener("submit", e => {
+            e.preventDefault();
+            const data = window.SiteData.getData();
+            const cat = document.getElementById("newProdCategory").value;
+            data.products.push({
+              id: "paket-" + Date.now(),
+              name: document.getElementById("newProdName").value.trim(),
+              category: cat,
+              weightLabel: cat.toUpperCase(),
+              badge: "Yeni Paket",
+              price: Number(document.getElementById("newProdPrice").value || 0),
+              priceText: document.getElementById("newProdPriceText").value.trim(),
+              unitText: "Özel Üretici Çuvalı",
+              image: document.getElementById("newProdImage").value.trim(),
+              description: document.getElementById("newProdDesc").value.trim(),
+              randiman: document.getElementById("newProdRandiman").value.trim(),
+              harvestYear: document.getElementById("newProdHarvest").value.trim(),
+              originLocation: document.getElementById("newProdOrigin").value.trim(),
+              packagingDate: document.getElementById("newProdPackDate").value.trim(),
+              inStock: true,
+              isWholesale: cat === "toptan"
+            });
+            window.SiteData.saveData(data);
+            this.renderProductsEditor();
+            addProdForm.reset();
+            this.showAlert("✅ Yeni fındık paketi ve künye bilgileri eklendi!");
+          });
+        }
+
+        // Yeni Galeri Öğesi Ekleme
+        const addGalForm = document.getElementById("addGalleryMediaForm");
+        if (addGalForm) {
+          addGalForm.addEventListener("submit", e => {
+            e.preventDefault();
+            const data = window.SiteData.getData();
+            data.gallery.push({
+              id: "gal-" + Date.now(),
+              type: document.getElementById("galType").value,
+              category: document.getElementById("galCategory").value.trim(),
+              title: document.getElementById("galTitle").value.trim(),
+              url: document.getElementById("galUrl").value.trim(),
+              description: document.getElementById("galDesc").value.trim()
+            });
+            window.SiteData.saveData(data);
+            this.renderGalleryAdmin();
+            addGalForm.reset();
+            this.showAlert("✅ Yeni fotoğraf/video galeriye eklendi!");
+          });
+        }
+
+        // Genel Ayarlar Kaydetme
+        const setForm = document.getElementById("adminSettingsForm");
+        if (setForm) {
+          setForm.addEventListener("submit", e => {
+            e.preventDefault();
+            const data = window.SiteData.getData();
+            data.settings.heroTitle = document.getElementById("setHeroTitle").value.trim();
+            data.settings.adventureBgImage = document.getElementById("setAdvBg").value.trim();
+            data.settings.phone = document.getElementById("setPhone").value.trim();
+            data.settings.whatsapp = document.getElementById("setWhatsapp").value.trim();
+            data.settings.bankName = document.getElementById("setBankName").value.trim();
+            data.settings.ibanHolder = document.getElementById("setIbanHolder").value.trim();
+            data.settings.ibanNumber = document.getElementById("setIbanNumber").value.trim();
+            data.settings.ga4Id = document.getElementById("setGa4Id").value.trim();
+            data.settings.googleAdsId = document.getElementById("setGoogleAdsId").value.trim();
+            data.settings.metaPixelId = document.getElementById("setMetaPixelId").value.trim();
+            data.settings.tiktokPixelId = document.getElementById("setTiktokPixelId").value.trim();
+            window.SiteData.saveData(data);
+            this.showAlert("✅ Site ayarları, IBAN ve Reklam Pixel ID'leri kaydedildi!");
+          });
+        }
+
+        // Varsayılana Sıfırla
+        const resetBtn = document.getElementById("resetDefaultDataBtn");
+        if (resetBtn) {
+          resetBtn.addEventListener("click", () => {
+            if (confirm("Tüm paket ve site verileri ilk kurulum ayarlarına sıfırlansın mı?")) {
+              window.SiteData.resetToDefaults();
+              this.renderAll();
+              this.showAlert("🔄 Tüm veriler varsayılan ayarlara döndürüldü.");
+            }
+          });
+        }
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      AdminController.init();
+    });
+  </script>
+</body>
+</html>
+
