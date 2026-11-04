@@ -258,16 +258,36 @@ const DuayeriApp = {
       const comboTrigger = document.getElementById("mbComboTrigger");
       const comboPopover = document.getElementById("mbComboPopover");
       if (comboTrigger && comboPopover) {
+        // WhatsApp butonunu açılan menünün (Kargo & İletişim) üstüne kaydır
+        const liftWhatsapp = isOpen => {
+          const waBtn = document.querySelector(".floating-whatsapp");
+          if (!waBtn) return;
+          if (isOpen) {
+            const wrap = comboPopover.offsetParent || comboPopover.parentElement;
+            const wrapBottom = wrap.getBoundingClientRect().bottom;
+            const popoverBottomOffset = parseFloat(getComputedStyle(comboPopover).bottom) || 0;
+            const popoverTop = wrapBottom - popoverBottomOffset - comboPopover.offsetHeight;
+            const newBottom = Math.max(88, window.innerHeight - popoverTop + 14);
+            waBtn.style.bottom = `${newBottom}px`;
+            waBtn.classList.add("wa-lifted");
+          } else {
+            waBtn.style.bottom = "";
+            waBtn.classList.remove("wa-lifted");
+          }
+        };
+
         comboTrigger.addEventListener("click", e => {
           e.stopPropagation();
           const isOpen = comboPopover.classList.toggle("open");
           comboTrigger.setAttribute("aria-expanded", String(isOpen));
+          liftWhatsapp(isOpen);
         });
 
         document.addEventListener("click", e => {
           if (!comboPopover.contains(e.target) && e.target !== comboTrigger) {
             comboPopover.classList.remove("open");
             comboTrigger.setAttribute("aria-expanded", "false");
+            liftWhatsapp(false);
           }
         });
       }
