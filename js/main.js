@@ -161,6 +161,29 @@ const DuayeriApp = {
   },
 
   setupMobileMenu() {
+    // 📱 Sadece mobilde header logosu yerine footer'daki yuvarlak mühür logoyu kullan
+    const headerBrand = document.querySelector(".navbar .brand-logo");
+    if (headerBrand && !headerBrand.querySelector(".brand-seal-mobile")) {
+      const seal = document.createElement("span");
+      seal.className = "footer-logo-seal brand-seal-mobile";
+      seal.setAttribute("aria-hidden", "true");
+      seal.innerHTML = `
+        <img src="image/logo.png.png" alt="">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <defs>
+            <path id="headerSealTopArc" d="M 25,100 A 75,75 0 1,1 175,100" />
+            <path id="headerSealBottomArc" d="M 13,100 A 87,87 0 1,0 187,100" />
+          </defs>
+          <text class="seal-top-text">
+            <textPath href="#headerSealTopArc" startOffset="50%" text-anchor="middle">★ DUAYERİ FINDIK ★</textPath>
+          </text>
+          <text class="seal-bottom-text">
+            <textPath href="#headerSealBottomArc" startOffset="50%" text-anchor="middle">ÜRETİCİDEN TÜKETİCİYE</textPath>
+          </text>
+        </svg>`;
+      headerBrand.insertBefore(seal, headerBrand.firstChild);
+    }
+
     // 📱 Premium Mobil Alt Sayfa Paneli (Brew & Bliss Referanslı: Ortada Yükselen Yuvarlak Buton + Kargo & İletişim Birleşik İkon)
     if (!document.querySelector(".mobile-bottom-nav")) {
       const path = window.location.pathname.toLowerCase();

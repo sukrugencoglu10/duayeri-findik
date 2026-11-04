@@ -1706,6 +1706,11 @@ h4 {
   transform: scale(1.04);
 }
 
+/* Header mühür logosu masaüstünde gizli (sadece mobilde gösterilir) */
+.brand-seal-mobile {
+  display: none;
+}
+
 .footer-logo-seal img {
   width: 120px;
   height: 120px;
@@ -1864,6 +1869,29 @@ h4 {
   .brand-logo img {
     width: 66px;
     height: 66px;
+  }
+
+  /* Mobilde header logosu yerine footer'daki yuvarlak mühür logo */
+  .brand-logo > img {
+    display: none;
+  }
+
+  .brand-logo .brand-seal-mobile {
+    display: inline-flex;
+    width: 78px;
+    height: 78px;
+    flex-shrink: 0;
+    border-width: 2px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  }
+
+  .brand-logo .brand-seal-mobile img {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
   }
 
   /* 3. Brew & Bliss Birebir Premium Alt Sayfa Paneli */
