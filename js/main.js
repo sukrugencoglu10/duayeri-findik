@@ -161,44 +161,116 @@ const DuayeriApp = {
   },
 
   setupMobileMenu() {
-    const toggleBtn = document.getElementById("mobileMenuToggle");
-    const mobileNav = document.getElementById("mobileNav");
-    if (toggleBtn && mobileNav) {
-      toggleBtn.addEventListener("click", () => {
-        mobileNav.classList.toggle("open");
-      });
-    }
-
-    // 📱 Mobil Alt Sekme Barı (4 Buton: Ana Sayfa, Ürünlerimiz, Fındık Serüvenimiz, Fındık Rehberi)
+    // 📱 Premium Mobil Alt Sayfa Paneli (Brew & Bliss Referanslı: Ortada Yükselen Yuvarlak Buton + Kargo & İletişim Birleşik İkon)
     if (!document.querySelector(".mobile-bottom-nav")) {
       const path = window.location.pathname.toLowerCase();
       const isHome = path.endsWith("index.html") || path.endsWith("/");
-      const isProducts = path.endsWith("urunler.html");
+      const isProducts = path.endsWith("urunler.html") || path.endsWith("siparis.html");
       const isStory = path.endsWith("hakkimizda.html");
       const isBlog = path.endsWith("blog.html");
+      const isCargo = path.endsWith("kargo-takip.html");
+      const isContact = path.endsWith("iletisim.html");
+      const isSupportActive = isCargo || isContact;
 
       const bottomNav = document.createElement("nav");
       bottomNav.className = "mobile-bottom-nav";
-      bottomNav.setAttribute("aria-label", "Mobil Alt Sekmeler");
+      bottomNav.setAttribute("aria-label", "Mobil Alt Sekme Paneli");
       bottomNav.innerHTML = `
-        <a href="index.html" class="${isHome ? "active" : ""}">
-          <span class="mb-icon">🏠</span>
+        <a href="index.html" class="mb-item ${isHome ? "active" : ""}">
+          <svg class="mb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 10.5L12 3l9 7.5"></path>
+            <path d="M5 9.5V19a1 1 0 0 0 1 1h4.5v-5.5h3V20H18a1 1 0 0 0 1-1V9.5"></path>
+          </svg>
           <span>Ana Sayfa</span>
         </a>
-        <a href="urunler.html" class="${isProducts ? "active" : ""}">
-          <span class="mb-icon">🌰</span>
-          <span>Ürünlerimiz</span>
+
+        <a href="hakkimizda.html" class="mb-item ${isStory ? "active" : ""}">
+          <svg class="mb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+          <span>Serüven</span>
         </a>
-        <a href="hakkimizda.html" class="${isStory ? "active" : ""}">
-          <span class="mb-icon">🌿</span>
-          <span>Serüvenimiz</span>
+
+        <div class="mb-center-wrap">
+          <a href="urunler.html" class="mb-center-btn ${isProducts ? "active" : ""}">
+            <svg class="mb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>Ürünler</span>
+          </a>
+        </div>
+
+        <a href="blog.html" class="mb-item ${isBlog ? "active" : ""}">
+          <svg class="mb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <span>Rehber</span>
         </a>
-        <a href="blog.html" class="${isBlog ? "active" : ""}">
-          <span class="mb-icon">📖</span>
-          <span>Fındık Rehberi</span>
-        </a>
+
+        <div class="mb-combo-wrap">
+          <button type="button" class="mb-item mb-combo-trigger ${isSupportActive ? "active" : ""}" id="mbComboTrigger" aria-expanded="false">
+            <svg class="mb-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="14" height="11" rx="1.5"></rect>
+              <polygon points="15 7 19.5 7 22.5 10.5 22.5 15 15 15 15 7"></polygon>
+              <circle cx="5.5" cy="17.5" r="2"></circle>
+              <circle cx="18.5" cy="17.5" r="2"></circle>
+            </svg>
+            <span>Kargo & İletişim</span>
+          </button>
+
+          <div class="mb-combo-popover" id="mbComboPopover" aria-hidden="true">
+            <a href="kargo-takip.html" class="mb-combo-link ${isCargo ? "active" : ""}">
+              <span class="mb-combo-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13" rx="1"></rect>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                </svg>
+              </span>
+              <span class="mb-combo-text">
+                <strong>Kargo Takip</strong>
+                <small>Sipariş & Gönderi Sorgula</small>
+              </span>
+            </a>
+
+            <a href="iletisim.html" class="mb-combo-link ${isContact ? "active" : ""}">
+              <span class="mb-combo-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </span>
+              <span class="mb-combo-text">
+                <strong>İletişim & Harita</strong>
+                <small>Yol Tarifi & Bize Ulaşın</small>
+              </span>
+            </a>
+          </div>
+        </div>
       `;
       document.body.appendChild(bottomNav);
+
+      const comboTrigger = document.getElementById("mbComboTrigger");
+      const comboPopover = document.getElementById("mbComboPopover");
+      if (comboTrigger && comboPopover) {
+        comboTrigger.addEventListener("click", e => {
+          e.stopPropagation();
+          const isOpen = comboPopover.classList.toggle("open");
+          comboTrigger.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        document.addEventListener("click", e => {
+          if (!comboPopover.contains(e.target) && e.target !== comboTrigger) {
+            comboPopover.classList.remove("open");
+            comboTrigger.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
     }
   },
 
