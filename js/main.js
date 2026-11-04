@@ -120,25 +120,38 @@ const DuayeriApp = {
     const TARGET_ZOOM = 0.67;
 
     const syncScale = () => {
-      try {
-        if (window.innerWidth <= 768) {
-          document.documentElement.style.zoom = "1";
-          return;
+      if (window.innerWidth <= 768) {
+        document.documentElement.style.zoom = "1";
+        return;
+      }
+
+      const path = window.location.pathname.toLowerCase();
+      const currentDpr = window.devicePixelRatio || 1;
+      const isFourSubpages =
+        path.endsWith("hakkimizda.html") ||
+        path.endsWith("blog.html") ||
+        path.endsWith("kargo-takip.html") ||
+        path.endsWith("iletisim.html");
+
+      if (path.endsWith("index.html") || path.endsWith("/")) {
+        try {
+          window.name = "DUAYERI_DPR:" + String(currentDpr);
+        } catch (e) {}
+      }
+
+      if (isFourSubpages) {
+        let refDpr = 0;
+        if (window.name && window.name.startsWith("DUAYERI_DPR:")) {
+          refDpr = parseFloat(window.name.replace("DUAYERI_DPR:", "")) || 0;
         }
-
-        const path = window.location.pathname.toLowerCase();
-        const currentDpr = window.devicePixelRatio || 1;
-
-        // Ana sayfa veya ürünler sayfasındaki tarayıcı DPR'sini baz al
-        if (path.endsWith("index.html") || path.endsWith("urunler.html") || path.endsWith("/")) {
-          localStorage.setItem("DUAYERI_BASE_DPR", String(currentDpr));
+        if (refDpr > 0 && Math.abs(refDpr - currentDpr) > 0.02) {
+          const effectiveZoom = (TARGET_ZOOM * refDpr) / currentDpr;
+          document.documentElement.style.zoom = effectiveZoom.toFixed(4);
+        } else {
+          // Bu 4 sekmede tarayıcı %100 açıldığında ana sayfanın %67 görünümüyle birebir eşitle
+          document.documentElement.style.zoom = (TARGET_ZOOM * TARGET_ZOOM).toFixed(4);
         }
-
-        const baseDpr = parseFloat(localStorage.getItem("DUAYERI_BASE_DPR") || String(currentDpr));
-        // Eğer bir sekmede tarayıcı zoom'u zaten değiştirilmişse, onu da hesaba katarak net %67 ölçeğe sabitle
-        const effectiveZoom = (TARGET_ZOOM * baseDpr) / currentDpr;
-        document.documentElement.style.zoom = effectiveZoom.toFixed(4);
-      } catch (e) {
+      } else {
         document.documentElement.style.zoom = String(TARGET_ZOOM);
       }
     };
@@ -154,6 +167,38 @@ const DuayeriApp = {
       toggleBtn.addEventListener("click", () => {
         mobileNav.classList.toggle("open");
       });
+    }
+
+    // 📱 Mobil Alt Sekme Barı (4 Buton: Ana Sayfa, Ürünlerimiz, Fındık Serüvenimiz, Fındık Rehberi)
+    if (!document.querySelector(".mobile-bottom-nav")) {
+      const path = window.location.pathname.toLowerCase();
+      const isHome = path.endsWith("index.html") || path.endsWith("/");
+      const isProducts = path.endsWith("urunler.html");
+      const isStory = path.endsWith("hakkimizda.html");
+      const isBlog = path.endsWith("blog.html");
+
+      const bottomNav = document.createElement("nav");
+      bottomNav.className = "mobile-bottom-nav";
+      bottomNav.setAttribute("aria-label", "Mobil Alt Sekmeler");
+      bottomNav.innerHTML = `
+        <a href="index.html" class="${isHome ? "active" : ""}">
+          <span class="mb-icon">🏠</span>
+          <span>Ana Sayfa</span>
+        </a>
+        <a href="urunler.html" class="${isProducts ? "active" : ""}">
+          <span class="mb-icon">🌰</span>
+          <span>Ürünlerimiz</span>
+        </a>
+        <a href="hakkimizda.html" class="${isStory ? "active" : ""}">
+          <span class="mb-icon">🌿</span>
+          <span>Serüvenimiz</span>
+        </a>
+        <a href="blog.html" class="${isBlog ? "active" : ""}">
+          <span class="mb-icon">📖</span>
+          <span>Fındık Rehberi</span>
+        </a>
+      `;
+      document.body.appendChild(bottomNav);
     }
   },
 
